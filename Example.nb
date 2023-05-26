@@ -1,0 +1,20 @@
+(* Definindo a função de transferência do controlador PID *)
+Kp = 1;  (* Ganho proporcional *)
+Ki = 0.5;  (* Ganho integral *)
+Kd = 0.2;  (* Ganho derivativo *)
+K[s_] := Kp + Ki/s + Kd*s
+
+(* Definindo a função de entrada (referência) *)
+Input[t_] := Sin[t]
+
+(* Calculando a saída do sistema *)
+Output[t_] := InverseLaplaceTransform[K[s] LaplaceTransform[Input[t], t, s], s, t]
+
+(* Calculando o erro *)
+Error[t_] := Input[t] - Output[t]
+
+(* Plotando o gráfico *)
+Plot[{Output[t], Error[t], Input[t]}, {t, 0, 10}, 
+  PlotLegends -> {"Output", "Error", "Input"}, 
+  PlotLabel -> "PID Control System", 
+  AxesLabel -> {"Time (t)", "Value"}]
